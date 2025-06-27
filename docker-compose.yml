@@ -1,0 +1,70 @@
+version: '3.4'
+
+volumes:
+  l1_data:
+  l2_data:
+  op_log:
+
+services:
+  l2:
+    build:
+      context: .
+      dockerfile: Dockerfile.l2
+    restart: always
+    ports:
+      - "8545:8545"
+      - "8060:6060"
+    volumes:
+      - "${PWD}/datadir:/db"
+      - "${PWD}/genesis.json:/genesis.json"
+      - "${PWD}/jwt-secret.txt:/config/test-jwt-secret.txt"
+    entrypoint:
+      - "/bin/sh"
+      - "/entrypoint.sh"
+      - "--rollup.sequencerhttp=https://b3.calderachain.xyz/http"
+      - "--authrpc.jwtsecret=/config/test-jwt-secret.txt"
+
+  op-node:
+    depends_on:
+      - l2
+    image: "public.ecr.aws/i6b2w2n6/op-node:6.0.1"
+    stop_signal: SIGINT
+    stop_grace_period: 30s
+    restart: always
+    environment:
+      - OP_NODE_L1_BEACON_IGNORE=true
+      - OP_NODE_NAMESPACE_ID=ca1de12a8c022bd46803
+      - OP_NODE_S3_BUCKET=caldera-celestia-cache-prod
+      - OP_NODE_S3_REGION=us-west-2
+    command: >
+      op-node
+      --l1="${L1_RPC_URL:-https://1rpc.io/base}"
+      --l2=http://l2:8551
+      --l2.jwt-secret=/config/test-jwt-secret.txt 
+      --sequencer.enabled=false
+      --verifier.l1-confs=10
+      --rollup.config=/rollup.json
+      --rpc.addr=0.0.0.0
+      --rpc.port=8545
+      --p2p.no-discovery=false
+      --p2p.listen.ip=0.0.0.0
+      --p2p.listen.tcp=9003
+      --p2p.listen.udp=9003
+      --p2p.static=/dns4/b3-p2p.calderachain.xyz/tcp/9003/p2p/16Uiu2HAm1yyHgvkvdwQDJs7qNYGgPLNSAmWNtCSqR6t4CTZcmtez
+      --snapshotlog.file=/op_log/snapshot.log
+      --p2p.priv.path=/config/p2p-node-key.txt
+      --metrics.enabled
+      --metrics.addr=0.0.0.0
+      --metrics.port=7300
+      --pprof.enabled
+      --rpc.enable-admin
+    ports:
+      - "7545:8545"
+      - "9003:9003"
+      - "7300:7300"
+      - "6060:6060"
+    volumes:
+      - "${PWD}/p2p-node-key.txt:/config/p2p-node-key.txt"
+      - "${PWD}/jwt-secret.txt:/config/test-jwt-secret.txt"
+      - "${PWD}/rollup.json:/rollup.json"
+      - op_log:/op_log
