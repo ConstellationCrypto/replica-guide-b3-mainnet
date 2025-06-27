@@ -1,4 +1,4 @@
-# Replica Guide
+# Replica Guide for B3
 =============
 To use: You'll want to bring your own more performant rpc url for the base chain instead of using the default. Configure this by `export L1_RPC_URL={YOUR BASE CHAIN RPC URL}`. Then run `make replica-up`. Syncing the replica from scratch might take up to a couple hours
 
