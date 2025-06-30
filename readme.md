@@ -1,5 +1,4 @@
 # Replica Guide for B3
-=============
 To use: You'll want to bring your own more performant rpc url for the base chain instead of using the default. Configure this by `export L1_RPC_URL={YOUR BASE CHAIN RPC URL}`. Then run `make replica-up`. Syncing the replica from scratch might take up to a couple hours
 
 A number of constants have already been set:
@@ -16,13 +15,14 @@ To check on the sync status of the node:
 
 or `bash progress.sh`
 
+## Snapshot:
+https://constellationlabs-dashboard-beta.s3.us-west-2.amazonaws.com/b3/snap-0be9876c865dda892.tar.gz
 
-
-Commands:
-=========
-
+## Commands:
+```
     L1_RPC_URL={INSERT RPC URL} make replica-up
 
     make replica-down
 
     make replica-clean
+```
