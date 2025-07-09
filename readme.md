@@ -16,7 +16,7 @@ To check on the sync status of the node:
 or `bash progress.sh`
 
 ## Snapshot:
-https://constellationlabs-dashboard-beta.s3.us-west-2.amazonaws.com/b3/snap-0be9876c865dda892.tar.gz
+https://constellationlabs-dashboard-beta.s3.us-west-2.amazonaws.com/b3/Jul_1_2025_b3_geth_data.tar
 
 ## Commands:
 ```
