@@ -1,4 +1,4 @@
-FROM public.ecr.aws/i6b2w2n6/op-geth:6.0.1
+FROM public.ecr.aws/i6b2w2n6/op-geth:6.2.0
 
 RUN apk add --no-cache jq
 

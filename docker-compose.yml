@@ -27,7 +27,7 @@ services:
   op-node:
     depends_on:
       - l2
-    image: "public.ecr.aws/i6b2w2n6/op-node:6.0.1"
+    image: "public.ecr.aws/i6b2w2n6/op-node:6.2.0"
     stop_signal: SIGINT
     stop_grace_period: 30s
     restart: always
@@ -36,6 +36,7 @@ services:
       - OP_NODE_NAMESPACE_ID=ca1de12a8c022bd46803
       - OP_NODE_S3_BUCKET=caldera-celestia-cache-prod
       - OP_NODE_S3_REGION=us-west-2
+      - OP_NODE_OVERRIDE_PECTRABLOBSCHEDULE="1788220800" #Tuesday, September 1, 2026 12:00:00 AM
     command: >
       op-node
       --l1="${L1_RPC_URL:-https://1rpc.io/base}"
