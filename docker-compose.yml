@@ -36,7 +36,7 @@ services:
       - OP_NODE_NAMESPACE_ID=ca1de12a8c022bd46803
       - OP_NODE_S3_BUCKET=caldera-celestia-cache-prod
       - OP_NODE_S3_REGION=us-west-2
-      - OP_NODE_OVERRIDE_PECTRABLOBSCHEDULE="1788220800" #Tuesday, September 1, 2026 12:00:00 AM
+      - OP_NODE_OVERRIDE_PECTRABLOBSCHEDULE="25905000" #Tuesday, September 1, 2026 12:00:00 AM
     command: >
       op-node
       --l1="${L1_RPC_URL:-https://1rpc.io/base}"
