@@ -26,3 +26,6 @@ https://constellationlabs-dashboard-beta.s3.us-west-2.amazonaws.com/b3/Jul_1_202
 
     make replica-clean
 ```
+
+## Celestia upgrades
+Please refer to celestia docs for network upgrades: https://docs.celestia.org/how-to-guides/participate#network-upgrades
