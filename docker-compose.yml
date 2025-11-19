@@ -27,7 +27,7 @@ services:
   op-node:
     depends_on:
       - l2
-    image: "public.ecr.aws/i6b2w2n6/op-node:6.0.1"
+    image: "public.ecr.aws/i6b2w2n6/op-node:1.16.1-celestia-e9ec322"
     stop_signal: SIGINT
     stop_grace_period: 30s
     restart: always
@@ -35,7 +35,10 @@ services:
       - OP_NODE_L1_BEACON_IGNORE=true
       - OP_NODE_NAMESPACE_ID=ca1de12a8c022bd46803
       - OP_NODE_S3_BUCKET=caldera-celestia-cache-prod
-      - OP_NODE_S3_REGION=us-west-2
+      - OP_NODE_S3_REGION=us-west-2      
+      #Wednesday, December 17, 2025 6:51:37 PM
+      - OP_NODE_OVERRIDE_PECTRABLOBSCHEDULE="1765997497"
+      - OP_NODE_ROLLUP_L1_CHAIN_CONFIG=/config/l1_chain_config.json
     command: >
       op-node
       --l1="${L1_RPC_URL:-https://1rpc.io/base}"
@@ -66,5 +69,6 @@ services:
     volumes:
       - "${PWD}/p2p-node-key.txt:/config/p2p-node-key.txt"
       - "${PWD}/jwt-secret.txt:/config/test-jwt-secret.txt"
+      - "${PWD}/l1_chain_config.json:/l1_chain_config.json"
       - "${PWD}/rollup.json:/rollup.json"
       - op_log:/op_log
