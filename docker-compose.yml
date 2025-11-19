@@ -37,7 +37,7 @@ services:
       - OP_NODE_S3_BUCKET=caldera-celestia-cache-prod
       - OP_NODE_S3_REGION=us-west-2      
       #Wednesday, December 17, 2025 6:51:37 PM
-      - OP_NODE_OVERRIDE_PECTRABLOBSCHEDULE="1765997497"
+      - OP_NODE_OVERRIDE_PECTRABLOBSCHEDULE=1765997497
       - OP_NODE_ROLLUP_L1_CHAIN_CONFIG=/config/l1_chain_config.json
     command: >
       op-node
@@ -69,6 +69,6 @@ services:
     volumes:
       - "${PWD}/p2p-node-key.txt:/config/p2p-node-key.txt"
       - "${PWD}/jwt-secret.txt:/config/test-jwt-secret.txt"
-      - "${PWD}/l1_chain_config.json:/l1_chain_config.json"
+      - "${PWD}/l1_chain_config.json:/config/l1_chain_config.json"
       - "${PWD}/rollup.json:/rollup.json"
       - op_log:/op_log
