@@ -1,0 +1,79 @@
+# ==============================================================================
+# Stateless DA Server Configuration (B3 mainnet replica)
+# ==============================================================================
+#
+# Read-only replica: bridge + S3 fallback only (no blob submission / no signer).
+# See https://github.com/celestiaorg/op-alt-da
+#
+# ==============================================================================
+
+addr = "0.0.0.0"
+port = 3100
+log_level = "info"
+log_format = "text"
+
+read_timeout = "30s"
+write_timeout = "120s"
+idle_timeout = "60s"
+
+# ==============================================================================
+# CELESTIA CONFIGURATION
+# ==============================================================================
+
+[celestia]
+namespace = "00000000000000000000000000000000000000ca1de12a8c022bd46803"
+blobid_compact = true
+
+# Bridge node (reads only)
+bridge_addr = "https://REPLACE.celestia-mainnet.quiknode.pro/REPLACE/"
+bridge_auth_token = "REPLACE"
+bridge_tls_enabled = true
+
+# Omit core_grpc_* for read-only — no signer / KMS / keyring required.
+# core_grpc_addr = ""
+# core_grpc_auth_token = ""
+# core_grpc_tls_enabled = true
+# p2p_network = "celestia"
+
+# ==============================================================================
+# SUBMISSION CONFIGURATION
+# ==============================================================================
+
+[submission]
+timeout = "60s"
+tx_priority = 2
+max_blob_size = "2MB"
+
+# ==============================================================================
+# READ CONFIGURATION
+# ==============================================================================
+
+[read]
+timeout = "30s"
+
+# ==============================================================================
+# METRICS CONFIGURATION
+# ==============================================================================
+
+[metrics]
+enabled = true
+port = 6060
+
+# ==============================================================================
+# FALLBACK STORAGE (S3)
+# ==============================================================================
+
+[fallback]
+enabled = true
+provider = "s3"
+# Read-only replica: only read from S3 when Celestia fails (no write-through).
+mode = "read_fallback"
+
+[fallback.s3]
+bucket = "caldera-celestia-cache-prod"
+prefix = "00000000000000000000000000000000000000ca1de12a8c022bd46803"
+endpoint = ""
+region = "us-west-2"
+credential_type = "anonymous"
+timeout = "60s"
+read_legacy_blobs = true

@@ -1,4 +1,10 @@
 {
+  "alt_da": {
+    "da_challenge_contract_address": "0x0000000000000000000000000000000000000000",
+    "da_challenge_window": 500,
+    "da_commitment_type": "GenericCommitment",
+    "da_resolve_window": 1000
+  },
   "genesis": {
     "l1": {
       "hash": "0x11530134005e6534c7c9e8991ddd3db8a785b64864f472718a73685b2e3c2198",

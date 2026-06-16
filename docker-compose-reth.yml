@@ -1,0 +1,130 @@
+# B3 mainnet replica using op-reth + op-node (AltDA) + op-alt-da (Celestia).
+#
+# Prerequisites:
+#   export L1_RPC_URL=<your-base-mainnet-rpc>
+#   # Optional: L1_BEACON_URL if not using OP_NODE_L1_BEACON_IGNORE
+#
+# Datadir: restore from a reth snapshot into ./reth_data when available, or sync from scratch.
+#
+# Start:
+#   docker compose -f docker-compose-reth.yml up -d
+#
+# See readme.md for op-alt-da Celestia configuration.
+
+volumes:
+  op_log:
+
+services:
+  op-reth:
+    image: public.ecr.aws/i6b2w2n6/op-reth:v2.2.3
+    platform: linux/amd64
+    restart: always
+    ports:
+      - "0.0.0.0:${OP_RETH_METRICS_PORT:-9001}:9001"
+      - "0.0.0.0:${OP_RETH_DISCOVERY_PORT:-30303}:30303/tcp"
+      - "0.0.0.0:${OP_RETH_DISCOVERY_PORT:-30303}:30303/udp"
+      - "0.0.0.0:${OP_RETH_RPC_PORT:-8545}:8545"
+      - "0.0.0.0:${OP_RETH_WS_PORT:-8546}:8546"
+      - "0.0.0.0:${OP_RETH_ENGINE_PORT:-8551}:8551"
+    volumes:
+      - "${PWD}/reth_data:/root/datadir"
+      - "${PWD}/jwt-secret.txt:/config/jwt.txt:ro"
+      - "${PWD}/genesis.json:/config/genesisReth.json:ro"
+    command: >
+      node
+      --datadir=/root/datadir
+      --storage.v2=false
+      --proofs-history
+      --proofs-history.storage-path=/root/datadir/proofs-db
+      --proofs-history.storage-version=v2
+      --rpc.eth-proof-window=1209600
+      --proofs-history.window=5184000
+      --rollup.disable-tx-pool-gossip
+      --rollup.sequencer=https://b3.calderachain.xyz/http
+      --metrics=0.0.0.0:9001
+      --authrpc.addr=0.0.0.0
+      --authrpc.port=8551
+      --authrpc.jwtsecret=/config/jwt.txt
+      --http
+      --http.addr=0.0.0.0
+      --http.port=8545
+      --http.api=web3,debug,eth,txpool,net
+      --http.corsdomain=*
+      --discovery.port=30303
+      --ws
+      --ws.addr=0.0.0.0
+      --ws.port=8546
+      --ws.origins=*
+      --ipcdisable
+      --engine.disable-state-cache
+      --chain=/config/genesisReth.json
+
+  op-alt-da:
+    image: public.ecr.aws/i6b2w2n6/op-alt-da:v0.15.0-4d9d54d
+    platform: linux/amd64
+    restart: always
+    ports:
+      - "0.0.0.0:${OP_ALTDA_PORT:-13100}:3100"
+      - "0.0.0.0:${OP_ALTDA_METRICS_PORT:-16060}:6060"
+    volumes:
+      - "${PWD}/op-alt-da-config.toml:/config.toml:ro"
+    command:
+      - --config
+      - /config.toml
+    environment:
+      AWS_REGION: ${AWS_REGION:-us-west-2}
+      OP_ALTDA_CONFIG: /config.toml
+      OP_ALTDA_CELESTIA_NAMESPACE: "00000000000000000000000000000000000000ca1de12a8c022bd46803"
+
+  op-node:
+    depends_on:
+      - op-reth
+      - op-alt-da
+    image: public.ecr.aws/i6b2w2n6/op-node:1.16.1-celestia-e9ec322-altda
+    platform: linux/amd64
+    stop_signal: SIGINT
+    stop_grace_period: 30s
+    restart: always
+    environment:
+      OP_NODE_L1_BEACON: ${L1_BEACON_URL:-}
+      OP_NODE_L1_BEACON_IGNORE: "true"
+      OP_NODE_OVERRIDE_PECTRABLOBSCHEDULE: "1765997497"
+      OP_NODE_ROLLUP_L1_CHAIN_CONFIG: /config/l1_chain_config.json
+      OP_NODE_ALTDA_ENABLED: "true"
+      OP_NODE_ALTDA_DA_SERVER: "http://op-alt-da:3100"
+      OP_NODE_ALTDA_DA_SERVICE: "true"
+      OP_NODE_ALTDA_VERIFY_ON_READ: "true"
+    command: >
+      op-node
+      --l1="${L1_RPC_URL}"
+      --l2=http://op-reth:8551
+      --l2.jwt-secret=/config/jwt-secret.txt
+      --l2.enginekind=reth
+      --sequencer.enabled=false
+      --verifier.l1-confs=10
+      --rollup.config=/rollup.json
+      --rpc.addr=0.0.0.0
+      --rpc.port=8545
+      --p2p.disable=false
+      --p2p.no-discovery=false
+      --p2p.listen.ip=0.0.0.0
+      --p2p.listen.tcp=9003
+      --p2p.listen.udp=9003
+      --p2p.static=/dns4/b3-p2p.calderachain.xyz/tcp/9003/p2p/16Uiu2HAm1yyHgvkvdwQDJs7qNYGgPLNSAmWNtCSqR6t4CTZcmtez
+      --snapshotlog.file=/op_log/snapshot.log
+      --p2p.priv.path=/config/p2p-node-key.txt
+      --metrics.enabled
+      --metrics.addr=0.0.0.0
+      --metrics.port=7300
+      --pprof.enabled
+      --rpc.enable-admin
+    ports:
+      - "${OP_NODE_RPC_HOST_PORT:-17545}:8545"
+      - "${OP_NODE_P2P_HOST_PORT:-19003}:9003"
+      - "${OP_NODE_METRICS_HOST_PORT:-17300}:7300"
+    volumes:
+      - "${PWD}/p2p-node-key.txt:/config/p2p-node-key.txt"
+      - "${PWD}/jwt-secret.txt:/config/jwt-secret.txt"
+      - "${PWD}/l1_chain_config.json:/config/l1_chain_config.json:ro"
+      - "${PWD}/rollup.json:/rollup.json:ro"
+      - op_log:/op_log
