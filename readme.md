@@ -37,17 +37,17 @@ Uses [docker-compose-reth.yml](docker-compose-reth.yml) with:
 
 Celestia namespace: `ca1de12a8c022bd46803` (29-byte v0 form in config: `00000000000000000000000000000000000000ca1de12a8c022bd46803`).
 
-### Reth datadir
+### Reth datadir snapshot (recommended)
 
-Extract chain data into `./reth_data` before the first start. A dedicated reth snapshot may be published later; until then you can sync from scratch or reuse an existing reth export if you have one.
+Download and extract into `./reth_data` before the first start. This snapshot includes proofs data under `proofs-db/`:
 
-If you do not need proofs, remove these flags from `docker-compose-reth.yml` (`op-reth` service):
+https://caldera-chain-data-snapshots.s3.us-west-2.amazonaws.com/exported-snapshots/bedrock-b3/bedrock-b3-reth-2026-Jun-15.tar
+
+If you do not need historical eth proofs, you can delete `reth_data/proofs-db/` after extraction to save disk space. Remove these flags from `docker-compose-reth.yml` (`op-reth` service) as well:
 
 ```
 --proofs-history --proofs-history.storage-path=/root/datadir/proofs-db --proofs-history.storage-version=v2 --rpc.eth-proof-window=1209600 --proofs-history.window=5184000
 ```
-
-and delete `reth_data/proofs-db`.
 
 ### Configure op-alt-da
 

@@ -4,7 +4,8 @@
 #   export L1_RPC_URL=<your-base-mainnet-rpc>
 #   # Optional: L1_BEACON_URL if not using OP_NODE_L1_BEACON_IGNORE
 #
-# Datadir: restore from a reth snapshot into ./reth_data when available, or sync from scratch.
+# Datadir (recommended): restore from the snapshot before first start:
+#   https://caldera-chain-data-snapshots.s3.us-west-2.amazonaws.com/exported-snapshots/bedrock-b3/bedrock-b3-reth-2026-Jun-15.tar
 #
 # Start:
 #   docker compose -f docker-compose-reth.yml up -d
