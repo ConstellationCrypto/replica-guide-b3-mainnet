@@ -24,7 +24,7 @@ idle_timeout = "60s"
 namespace = "00000000000000000000000000000000000000ca1de12a8c022bd46803"
 blobid_compact = true
 
-# Bridge node (reads only)
+# Bridge node or Light node (reads only) https://celestia.org/run-a-light-node/#start-up-a-node
 bridge_addr = "https://REPLACE.celestia-mainnet.quiknode.pro/REPLACE/"
 bridge_auth_token = "REPLACE"
 bridge_tls_enabled = true
