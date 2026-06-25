@@ -14,7 +14,7 @@ Bring your own Base mainnet RPC (`L1_RPC_URL`, chain id `8453`). The sequencer H
 
 Download and extract into `./reth_data` before the first start. This snapshot includes proofs data under `proofs-db/`:
 
-https://caldera-chain-data-snapshots.s3.us-west-2.amazonaws.com/exported-snapshots/bedrock-b3/bedrock-b3-reth-2026-Jun-15.tar
+https://caldera-chain-data-snapshots.s3.us-west-2.amazonaws.com/exported-snapshots/bedrock-b3/bedrock-b3-reth-2026-Jun-24.tar
 
 If you do not need historical eth proofs, you can delete `reth_data/proofs-db/` after extraction to save disk space. Remove these flags from `docker-compose-reth.yml` (`op-reth` service) as well:
 
