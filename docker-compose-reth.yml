@@ -17,7 +17,7 @@ volumes:
 
 services:
   op-reth:
-    image: public.ecr.aws/i6b2w2n6/op-reth:v2.2.3
+    image: public.ecr.aws/i6b2w2n6/op-reth:v2.3.1
     platform: linux/amd64
     restart: always
     ports:
