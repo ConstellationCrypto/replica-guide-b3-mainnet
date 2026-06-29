@@ -61,7 +61,7 @@ services:
       --chain=/config/genesisReth.json
 
   op-alt-da:
-    image: public.ecr.aws/i6b2w2n6/op-alt-da:v0.15.0-4d9d54d
+    image: public.ecr.aws/i6b2w2n6/op-alt-da:v0.15.0-804b2d7
     platform: linux/amd64
     restart: always
     ports:
