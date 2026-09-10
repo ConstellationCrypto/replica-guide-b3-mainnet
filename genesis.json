@@ -24,6 +24,9 @@
     "fjordTime": 0,
     "terminalTotalDifficulty": 0,
     "terminalTotalDifficultyPassed": true,
+    "graniteTime": 1789128000,
+    "holoceneTime": 1789135200,
+    "isthmusTime": 1789142400,
     "optimism": {
       "eip1559Elasticity": 6,
       "eip1559Denominator": 250,

@@ -33,13 +33,16 @@
   "delta_time": 0,
   "ecotone_time": 0,
   "fjord_time": 0,
+  "granite_time": 1789128000,
+  "holocene_time": 1789135200,
+  "isthmus_time": 1789142400,
   "batch_inbox_address": "0xfc536ab2cc1e784ae181ca8a23b3e9c828b934a8",
   "deposit_contract_address": "0x3a314a6a3c1470bf2854960d3ce9d2435c7ba794",
   "l1_system_config_address": "0xa9bc65ff5a3106351fa92b04c91d505bccd92cad",
   "protocol_versions_address": "0x0000000000000000000000000000000000000000",
   "chain_op_config": {
     "eip1559Elasticity": 6,
-    "eip1559Denominator": 50,
+    "eip1559Denominator": 250,
     "eip1559DenominatorCanyon": 250
   }
 }
